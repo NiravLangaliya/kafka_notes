@@ -43,3 +43,10 @@ In this example, the livenessProbe field is added to the Kafka broker container 
 The failureThreshold field indicates the number of consecutive failures that must occur before the container is considered unhealthy and should be restarted. In this case, if the liveness check fails three times in a row, Kubernetes will automatically restart the container.
 
 Note that this example assumes that the Kafka broker container is exposing port 9092 for client connections. If the broker is using a different port or a custom protocol, you will need to modify the livenessProbe accordingly.
+
+
+No, Kubernetes does not always perform liveness checks on TCP.
+
+Liveness probes are used by Kubernetes to determine if a container in a pod is still running and healthy. The probes can be configured to check for different aspects of the container's health, including whether it is listening on a particular port or responding to HTTP requests.
+
+While it is common to use HTTP endpoints for liveness probes, Kubernetes also supports TCP probes, which can be used to check if a container is listening on a specific TCP port. However, the use of TCP probes is not mandatory, and it ultimately depends on how the container is configured and what kind of health checks are necessary for it.
