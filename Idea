@@ -1,0 +1,32 @@
+Experian Synthetic Test Data Generation
+Imagine a world where out development process is no longer hindered by the lack of realistic test data. We are thrilled to present a solution that tackles one of the biggest bottlenecks in modern software development: realistic, synthetic test data generation.
+
+Problem: 
+Today's developers are often slowed down by the difficulty of generating meaningful, domain-specific test data that accurately mirrors real-world scenarios. Maintaining data integrity across different models, tables, and sources is a complex task, and getting it wrong can lead to software bugs, poor user experience, and ultimately, a lower quality product."
+
+
+Solution: 
+Our solution is an intelligent synthetic test data generator, leveraging machine learning, Python, and AWS services. It can take sample data, conduct data profiling, and generate realistic synthetic test data, all while maintaining the required data integrity.
+
+But what if there's no sample data to start with? No problem. Our solution will simply ask the user what kind of data they need, their domain, their use case, and how their data model is defined. Armed with this information, our generator will create the required synthetic test data from scratch. Customizability and personalization are at the core of our solution.
+
+
+Generate realistic synthetic test data
+Maintain the relational integrity of the synthetic test data.
+Control which test data is created, via user-defined business rules.
+
+Anonymize personal or sensitive data
+Auto-discover Personally Identifiable Information (PII).
+Apply prebuilt, customizable masking and pinning process while data is in motion.
+
+Evaluation Report:
+
+Synthetic Data Quality Scores (SQS):
+	Measure how closely the generated data maintains the statistical properties of the original dataset. 
+
+ML – Process
+
+Generative Adversarial Network (GAN). GANs consist of two parts: a generator and a discriminator. The generator tries to create data that seems like it could have come from the original dataset, and the discriminator tries to distinguish between real data from the original dataset and fake data created by the generator.
+
+
+https://github.com/gretelai/gretel-synthetics
