@@ -86,3 +86,53 @@ Note that this approach assumes you are using the `PythonOperator` to define you
 **<img width="732" alt="image" src="https://github.com/NiravLangaliya/kafka_notes/assets/13895686/bd7748e7-dd27-4c8a-bc8d-c4f88a1c0325">
 **
 While it is common to use HTTP endpoints for liveness probes, Kubernetes also supports TCP probes, which can be used to check if a container is listening on a specific TCP port. However, the use of TCP probes is not mandatory, and it ultimately depends on how the container is configured and what kind of health checks are necessary for it.
+
+
+
+
+
+
+
+**Senior Data Engineer**
+
+**Company: [Your Company Name]**
+
+**Location: [Your Company Location or "Remote"]**
+
+**Job Type: [Full-Time / Part-Time / Contract]**
+
+We are seeking an experienced and passionate Senior Data Engineer to join our dynamic and forward-thinking team. In this role, you will leverage your deep understanding of data processing technologies and programming languages to develop and optimize our data infrastructure. 
+
+**Key Responsibilities:**
+
+1. Perform large-scale data processing using Python and Apache Spark.
+2. Utilize AWS services like S3, EMR, EC2 for data storage and processing.
+3. Schedule, monitor, and troubleshoot data pipelines with Apache Airflow.
+4. Ensure the data quality, observability, and integrity across all our data infrastructure.
+5. Implement data structures and algorithms to optimize data processing and pipelines.
+6. Write and maintain robust Python test cases to validate data processing tasks.
+7. Oversee data versioning, backups, and restoration to ensure data resilience and availability.
+8. Collaborate with cross-functional teams to implement best practices in data management.
+
+**Skills & Qualifications:**
+
+1. Bachelors or Master’s degree in Computer Science, Data Science, or related field.
+2. Proven experience in a Data Engineering role, with a focus on large-scale data processing.
+3. Strong knowledge of Python programming language.
+4. Proficiency with AWS services, including S3, EMR, and EC2.
+5. Hands-on experience with Apache Spark and Apache Airflow.
+6. Excellent understanding of data structures and algorithms.
+7. Experience in writing Python test cases to validate data processing tasks.
+8. Deep understanding of data quality assurance, data versioning, backups, and restoration.
+9. Familiarity with Git or Bitbucket for version control.
+10. Strong communication and collaboration skills.
+
+**What We Offer:**
+
+[Provide details about the benefits and perks you offer. This could include health insurance, retirement plans, paid time off, flexible working hours, and so on.]
+
+If you're a proactive, problem-solving individual with a passion for big data, we'd love to hear from you. Apply today to join our team and take the next step in your data engineering career.
+
+[Your Company Name] is proud to be an equal opportunity employer.
+
+Please note that this job description is not designed to cover or contain a comprehensive listing of activities, duties, or responsibilities that are required of the employee for this job. Duties, responsibilities, and activities may change at any time with or without notice.
