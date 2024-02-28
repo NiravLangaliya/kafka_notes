@@ -1,0 +1,390 @@
+Could you please  prepare SQL interview questions at medium and hard level. when you create a questions , please keep this in account. nature of questions : 1) minimum two questions should be around retails domain and also regrading customer , sales , inventory .2) Also add one question regarding time series data . Additional things while creating questions  1) create a sample dataset which support question 2) create a table structure with insert statements to add sample data into table 3) question should be clearly explained and there should be room for alternate solution. 
+now can you add answer for each questions? 
+
+ChatGPT
+Sure, here are some SQL interview questions at medium and hard levels, along with their answers. I've included questions related to the retail domain, customer, sales, inventory, and one question regarding time series data.
+
+Medium Level Questions:
+1. Retail Sales Analysis
+
+Question:
+You are given a dataset representing sales transactions in a retail store. The dataset contains information about the transaction ID, customer ID, product ID, purchase date, and quantity sold. Write a SQL query to calculate the total sales amount for each product in the last month.
+
+Sample Dataset:
+
+sql
+Copy code
+CREATE TABLE Sales (
+    transaction_id INT,
+    customer_id INT,
+    product_id INT,
+    purchase_date DATE,
+    quantity_sold INT
+);
+
+INSERT INTO Sales VALUES
+(1, 101, 1, '2024-01-15', 2),
+(2, 102, 2, '2024-02-05', 1),
+(3, 103, 1, '2024-02-20', 3),
+(4, 104, 3, '2024-02-28', 2);
+Answer:
+
+sql
+Copy code
+SELECT product_id, SUM(quantity_sold) AS total_quantity_sold
+FROM Sales
+WHERE purchase_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH)
+GROUP BY product_id;
+2. Customer Ranking
+
+Question:
+In a retail store database, there's a table containing customer information including their name, total amount spent, and registration date. Write an SQL query to rank customers based on their total amount spent, and display their names along with their ranks.
+
+Sample Dataset:
+
+sql
+Copy code
+CREATE TABLE Customers (
+    customer_id INT,
+    name VARCHAR(50),
+    total_amount_spent DECIMAL(10, 2),
+    registration_date DATE
+);
+
+INSERT INTO Customers VALUES
+(101, 'John', 500.00, '2023-01-10'),
+(102, 'Alice', 750.00, '2023-03-20'),
+(103, 'Bob', 1000.00, '2023-05-15'),
+(104, 'Emma', 300.00, '2023-07-01');
+Answer:
+
+sql
+Copy code
+SELECT name, total_amount_spent,
+    DENSE_RANK() OVER (ORDER BY total_amount_spent DESC) AS rank
+FROM Customers;
+Hard Level Questions:
+1. Inventory Management
+
+Question:
+You're managing inventory for a retail store. Write an SQL query to find out the products that are running low in stock, considering a threshold of 10 items. Display the product name, current stock quantity, and reorder level.
+
+Sample Dataset:
+
+sql
+Copy code
+CREATE TABLE Products (
+    product_id INT,
+    product_name VARCHAR(50),
+    stock_quantity INT,
+    reorder_level INT
+);
+
+INSERT INTO Products VALUES
+(1, 'Laptop', 15, 10),
+(2, 'Printer', 8, 10),
+(3, 'Monitor', 20, 10),
+(4, 'Keyboard', 12, 10);
+Answer:
+
+sql
+Copy code
+SELECT product_name, stock_quantity, reorder_level
+FROM Products
+WHERE stock_quantity <= reorder_level;
+2. Time Series Analysis
+
+Question:
+You have a table storing daily sales data over the past year. Write an SQL query to calculate the average daily sales for each month, along with the month and year.
+
+Sample Dataset:
+
+sql
+Copy code
+CREATE TABLE DailySales (
+    sale_date DATE,
+    sales_amount DECIMAL(10, 2)
+);
+
+INSERT INTO DailySales VALUES
+('2023-01-01', 100.00),
+('2023-01-02', 120.00),
+...
+('2023-12-30', 150.00),
+('2023-12-31', 180.00);
+Answer:
+
+sql
+Copy code
+SELECT 
+    EXTRACT(YEAR FROM sale_date) AS sales_year,
+    EXTRACT(MONTH FROM sale_date) AS sales_month,
+    AVG(sales_amount) AS avg_daily_sales
+FROM DailySales
+GROUP BY EXTRACT(YEAR FROM sale_date), EXTRACT(MONTH FROM sale_date);
+These questions cover various aspects of SQL, including data analysis, ranking, inventory management, and time series analysis, while also focusing on the retail domain and customer-related data. The answers provide SQL queries to solve each problem, with room for alternative solutions and optimizations.
+User
+also Now can add Hard or advance level questions?  
+
+ChatGPT
+Certainly! Here are some hard or advanced level SQL interview questions:
+
+Hard/Advanced Level Questions:
+1. Customer Lifetime Value (CLV) Calculation
+
+Question:
+In a retail database, you have tables containing information about customers, their transactions, and purchase history. Write an SQL query to calculate the Customer Lifetime Value (CLV) for each customer. CLV is defined as the total revenue generated from a customer over their entire relationship with the company.
+
+Sample Dataset:
+
+sql
+Copy code
+CREATE TABLE Customers (
+    customer_id INT,
+    name VARCHAR(50),
+    registration_date DATE
+);
+
+CREATE TABLE Transactions (
+    transaction_id INT,
+    customer_id INT,
+    transaction_date DATE,
+    amount DECIMAL(10, 2)
+);
+
+INSERT INTO Customers VALUES
+(1, 'John', '2022-01-01'),
+(2, 'Alice', '2022-01-05');
+
+INSERT INTO Transactions VALUES
+(1, 1, '2022-01-02', 100.00),
+(2, 1, '2022-02-05', 150.00),
+(3, 2, '2022-01-10', 200.00),
+(4, 2, '2022-02-15', 250.00);
+Answer:
+
+sql
+Copy code
+SELECT 
+    c.customer_id,
+    c.name,
+    SUM(t.amount) AS total_revenue,
+    DATEDIFF(MAX(t.transaction_date), c.registration_date) AS customer_lifetime,
+    SUM(t.amount) / DATEDIFF(MAX(t.transaction_date), c.registration_date) AS CLV
+FROM Customers c
+JOIN Transactions t ON c.customer_id = t.customer_id
+GROUP BY c.customer_id, c.name, c.registration_date;
+2. Product Recommendations based on Customer Similarity
+
+Question:
+In a retail database, there are tables containing information about customers, their purchases, and the products they've bought. Write an SQL query to recommend products to customers based on the similarity of their purchase history with other customers. Consider recommending products that similar customers have bought but the current customer hasn't.
+
+Sample Dataset:
+
+sql
+Copy code
+CREATE TABLE Customers (
+    customer_id INT,
+    name VARCHAR(50)
+);
+
+CREATE TABLE Products (
+    product_id INT,
+    product_name VARCHAR(50)
+);
+
+CREATE TABLE Purchases (
+    purchase_id INT,
+    customer_id INT,
+    product_id INT
+);
+
+INSERT INTO Customers VALUES
+(1, 'John'),
+(2, 'Alice'),
+(3, 'Bob');
+
+INSERT INTO Products VALUES
+(1, 'Laptop'),
+(2, 'Printer'),
+(3, 'Monitor');
+
+INSERT INTO Purchases VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 2, 2),
+(4, 3, 1),
+(5, 3, 3);
+Answer:
+
+sql
+Copy code
+WITH CustomerProductCount AS (
+    SELECT 
+        customer_id,
+        product_id,
+        COUNT(*) AS purchase_count
+    FROM Purchases
+    GROUP BY customer_id, product_id
+),
+SimilarCustomers AS (
+    SELECT 
+        pc1.customer_id AS customer1,
+        pc2.customer_id AS customer2,
+        SUM(CASE WHEN pc1.product_id = pc2.product_id THEN 1 ELSE 0 END) AS similarity_score
+    FROM CustomerProductCount pc1
+    JOIN CustomerProductCount pc2 ON pc1.product_id = pc2.product_id
+    WHERE pc1.customer_id != pc2.customer_id
+    GROUP BY pc1.customer_id, pc2.customer_id
+)
+SELECT 
+    c.customer_id,
+    c.name,
+    p.product_id,
+    p.product_name
+FROM Customers c
+CROSS JOIN Products p
+LEFT JOIN Purchases pur ON c.customer_id = pur.customer_id AND p.product_id = pur.product_id
+LEFT JOIN (
+    SELECT 
+        sc.customer1,
+        sc.customer2,
+        MAX(sc.similarity_score) AS max_similarity
+    FROM SimilarCustomers sc
+    GROUP BY sc.customer1
+) max_sim ON c.customer_id = max_sim.customer1
+WHERE pur.purchase_id IS NULL
+AND max_sim.max_similarity >= 2; -- Adjust similarity threshold as needed
+These hard/advanced level SQL questions delve into more complex scenarios such as calculating customer lifetime value (CLV) and performing product recommendations based on customer similarity. The answers provide detailed SQL queries to address these challenges, incorporating advanced SQL techniques like window functions and common table expressions (CTEs).
+User
+Can you create a sample questions around data structure and around common data engineer problems with  medium and hard level  complexity and also provide  solution in python and scala 
+
+ChatGPT
+Certainly! Here are some sample questions around data structures and common data engineering problems, along with their solutions in both Python and Scala.
+
+Medium Level Question:
+1. Data Structure: Implement a Stack
+
+Question:
+Implement a stack data structure that supports the following operations:
+
+Push: Add an element to the top of the stack.
+Pop: Remove the element from the top of the stack and return it.
+Peek: Return the element at the top of the stack without removing it.
+IsEmpty: Return True if the stack is empty, False otherwise.
+Solution in Python:
+
+python
+Copy code
+class Stack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, val):
+        self.stack.append(val)
+
+    def pop(self):
+        if not self.is_empty():
+            return self.stack.pop()
+
+    def peek(self):
+        if not self.is_empty():
+            return self.stack[-1]
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+# Usage:
+s = Stack()
+s.push(1)
+s.push(2)
+print(s.peek())  # Output: 2
+print(s.pop())   # Output: 2
+print(s.is_empty())  # Output: False
+Solution in Scala:
+
+scala
+Copy code
+class Stack {
+  var stack: List[Int] = List()
+
+  def push(value: Int): Unit = {
+    stack = value :: stack
+  }
+
+  def pop(): Option[Int] = {
+    if (!isEmpty()) {
+      val top = stack.head
+      stack = stack.tail
+      Some(top)
+    } else {
+      None
+    }
+  }
+
+  def peek(): Option[Int] = {
+    if (!isEmpty()) {
+      Some(stack.head)
+    } else {
+      None
+    }
+  }
+
+  def isEmpty(): Boolean = {
+    stack.isEmpty
+  }
+}
+
+// Usage:
+val s = new Stack
+s.push(1)
+s.push(2)
+println(s.peek())  // Output: Some(2)
+println(s.pop())   // Output: Some(2)
+println(s.isEmpty())  // Output: false
+Hard Level Question:
+2. Data Engineering: Find Common Elements in Two Large Datasets
+
+Question:
+You have two large datasets stored in separate files, each containing millions of records. Write a program to find common elements between these datasets efficiently.
+
+Solution in Python:
+
+python
+Copy code
+def find_common_elements(file1, file2):
+    common_elements = set()
+    with open(file1, 'r') as f1:
+        for line in f1:
+            common_elements.add(line.strip())
+    with open(file2, 'r') as f2:
+        for line in f2:
+            element = line.strip()
+            if element in common_elements:
+                print(element)
+
+# Usage:
+file1 = 'dataset1.txt'
+file2 = 'dataset2.txt'
+find_common_elements(file1, file2)
+Solution in Scala:
+
+scala
+Copy code
+import scala.io.Source
+
+def findCommonElements(file1: String, file2: String): Unit = {
+  val set1 = Source.fromFile(file1).getLines.toSet
+  val set2 = Source.fromFile(file2).getLines.toSet
+  val commonElements = set1.intersect(set2)
+  commonElements.foreach(println)
+}
+
+// Usage:
+val file1 = "dataset1.txt"
+val file2 = "dataset2.txt"
+findCommonElements(file1, file2)
+These questions and solutions demonstrate a medium-level question focusing on implementing a stack data structure and a hard-level question related to data engineering, requiring efficient processing of large datasets to find common elements. The solutions are provided in both Python and Scala to showcase different approaches in these languages.
+
+
+
