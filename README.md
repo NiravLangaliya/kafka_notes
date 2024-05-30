@@ -136,3 +136,34 @@ If you're a proactive, problem-solving individual with a passion for big data, w
 [Your Company Name] is proud to be an equal opportunity employer.
 
 Please note that this job description is not designed to cover or contain a comprehensive listing of activities, duties, or responsibilities that are required of the employee for this job. Duties, responsibilities, and activities may change at any time with or without notice.
+
+
+
+ User           AWS KMS                AWS Secrets Manager        EMR                Java Code
+  |                |                           |                    |                    |
+  |                |                           |                    |                    |
+  |--Create AES Key-->|                        |                    |                    |
+  |                |                           |                    |                    |
+  |                |--Encrypt AES Key--------->|                    |                    |
+  |                |                           |                    |                    |
+  |                |<--Return Encrypted Key----|                    |                    |
+  |                |                           |                    |                    |
+  |                |                           |                    |                    |
+  |                |--Store Encrypted Key------>|                    |                    |
+  |                |                           |                    |                    |
+  |                |                           |                    |                    |
+  |                |<--Fetch Encrypted Key-----|                    |                    |
+  |                |                           |                    |                    |
+  |                |--Decrypt Key------------->|                    |                    |
+  |                |                           |                    |                    |
+  |                |<--Return Original Key-----|                    |                    |
+  |                |                           |                    |                    |
+  |                |                           |--Decrypt Key------>|                    |
+  |                |                           |                    |                    |
+  |                |                           |                    |                    |
+  |                |                           |<--Return Key--------|                    |
+  |                |                           |                    |                    |
+  |                |                           |                    |--Encrypt Data------>|
+  |                |                           |                    |                    |
+  |                |                           |                    |<--Return Encrypted Data--|
+  |                |                           |                    |                    |
