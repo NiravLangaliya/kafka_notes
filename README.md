@@ -167,3 +167,34 @@ Please note that this job description is not designed to cover or contain a comp
   |                |                           |                    |                    |
   |                |                           |                    |<--Return Encrypted Data--|
   |                |                           |                    |                    |
+
+
+
+  # Install eksctl (already pre-installed in CloudShell usually)
+which eksctl || curl --location \"https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz\" | tar xz -C /usr/local/bin
+
+# Create cluster (takes ~10-15 mins)
+eksctl create cluster \
+  --name simple-eks \
+  --region us-west-2 \
+  --nodegroup-name default-workers \
+  --node-type t3.medium \
+  --nodes 2 \
+  --nodes-min 1 \
+  --nodes-max 3 \
+  --managed
+
+
+# Check cluster nodes
+kubectl get nodes
+
+# Test deployment
+kubectl create deployment hello --image=nginx
+kubectl expose deployment hello --port=80 --type=LoadBalancer
+kubectl get svc hello
+
+
+# Destroys everything to avoid AWS charges
+eksctl delete cluster --name simple-eks --region us-west-2
+
+
