@@ -125,3 +125,6 @@ A user with the “contractor” persona is only able to view specific columns i
 | Lessons | Key insights and blockers |
 | Verdict | Pass/Fail + Recommendation |
 
+
+
+I am creating POC document in confluence in which I have to document different scenarios which I want to conduct and conclude as part of POC and see that are we able to achieve overall goal? this POC is regrading AWS Lake formation setup. so  assume a role of product data architecture and build a generic template. where clear goal is articulate for each approach , create definition of end result along with how we should achieve and approach can be documented and then actual steps we can add and finally we can have supporting documents , diagrams , screen shots and end of it what we have concluded that we can clearly define
