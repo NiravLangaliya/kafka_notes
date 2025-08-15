@@ -1,0 +1,90 @@
+<mxfile host="app.diagrams.net" modified="2025-08-15T11:37:00.000Z" agent="Grok" version="1.0" etag="unique-etag" type="device">
+  <diagram id="diagram_1" name="Architecture Diagram">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <!-- API Gateway -->
+        <mxCell id="2" value="API Gateway" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Step Functions -->
+        <mxCell id="3" value="Step Functions&lt;br&gt;(Workflow)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <!-- EventBridge -->
+        <mxCell id="4" value="EventBridge&lt;br&gt;(Scheduler)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Arrow: API Gateway -> Step Functions -->
+        <mxCell id="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- Arrow: EventBridge -> Step Functions -->
+        <mxCell id="6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="4" target="3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- Workflow Steps Container -->
+        <mxCell id="7" value="Workflow Steps" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="150" width="520" height="100" as="geometry"/>
+        </mxCell>
+        <!-- Input Lambda -->
+        <mxCell id="8" value="Input Lambda&lt;br&gt;(Validation)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="7">
+          <mxGeometry x="20" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Query Lambda -->
+        <mxCell id="9" value="Query Lambda&lt;br&gt;(RDS Query)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="7">
+          <mxGeometry x="190" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Transform Lambda -->
+        <mxCell id="10" value="Transform Lambda&lt;br&gt;(Data Processing)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="7">
+          <mxGeometry x="360" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Arrow: Step Functions -> Workflow Steps -->
+        <mxCell id="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="3" target="7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- Data Services Container -->
+        <mxCell id="12" value="" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="300" width="520" height="100" as="geometry"/>
+        </mxCell>
+        <!-- RDS -->
+        <mxCell id="13" value="RDS&lt;br&gt;(Database)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="12">
+          <mxGeometry x="20" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Glue -->
+        <mxCell id="14" value="Glue&lt;br&gt;(ETL Jobs)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="12">
+          <mxGeometry x="190" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- S3 -->
+        <mxCell id="15" value="S3&lt;br&gt;(Output Storage)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="12">
+          <mxGeometry x="360" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Arrow: Workflow Steps -> Data Services -->
+        <mxCell id="16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="7" target="12">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- Monitoring Services Container -->
+        <mxCell id="17" value="" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="450" width="520" height="100" as="geometry"/>
+        </mxCell>
+        <!-- DynamoDB -->
+        <mxCell id="18" value="DynamoDB&lt;br&gt;(State Store)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="17">
+          <mxGeometry x="20" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- SNS -->
+        <mxCell id="19" value="SNS&lt;br&gt;(Notifications)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="17">
+          <mxGeometry x="190" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- CloudWatch -->
+        <mxCell id="20" value="CloudWatch&lt;br&gt;(Monitoring)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="17">
+          <mxGeometry x="360" y="30" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <!-- Arrow: Data Services -> Monitoring Services -->
+        <mxCell id="21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="12" target="17">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
