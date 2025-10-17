@@ -1,0 +1,129 @@
+import boto3
+import json
+from datetime import datetime, timedelta
+
+# ========== CONFIGURATION ==========
+ACCOUNT_B_ID = "123456789012"   # Replace with Account B ID
+LOOKBACK_HOURS = 24             # How far back to search in CloudTrail
+REGION = "us-east-1"            # Modify if CloudTrail is region-specific
+
+# ========== CLIENTS ==========
+iam = boto3.client("iam")
+cloudtrail = boto3.client("cloudtrail", region_name=REGION)
+
+def find_trusted_roles(account_b_id):
+    """
+    Find all IAM roles in Account A that trust Account B to assume them.
+    """
+    print(f"\n🔍 Searching for IAM roles in Account A trusted by Account {account_b_id} ...")
+    roles = []
+    paginator = iam.get_paginator("list_roles")
+
+    for page in paginator.paginate():
+        for role in page["Roles"]:
+            role_name = role["RoleName"]
+            role_doc = iam.get_role(RoleName=role_name)["Role"]["AssumeRolePolicyDocument"]
+
+            statements = role_doc.get("Statement", [])
+            if not isinstance(statements, list):
+                statements = [statements]
+
+            for stmt in statements:
+                if stmt.get("Effect") != "Allow":
+                    continue
+                principal = stmt.get("Principal", {})
+                aws_principal = principal.get("AWS")
+
+                if isinstance(aws_principal, list):
+                    if any(account_b_id in arn for arn in aws_principal):
+                        roles.append(role_name)
+                elif isinstance(aws_principal, str):
+                    if account_b_id in aws_principal:
+                        roles.append(role_name)
+
+    print(f"✅ Found {len(roles)} roles trusted by Account {account_b_id}.")
+    for r in roles:
+        print(f"   - {r}")
+    return roles
+
+
+def find_assume_role_events(account_b_id, lookback_hours):
+    """
+    Query CloudTrail for sts:AssumeRole events involving Account B.
+    """
+    print(f"\n🔍 Looking up AssumeRole events from Account {account_b_id} in the last {lookback_hours} hours ...")
+
+    start_time = datetime.utcnow() - timedelta(hours=lookback_hours)
+    events = []
+
+    paginator = cloudtrail.get_paginator("lookup_events")
+    for page in paginator.paginate(
+        LookupAttributes=[{"AttributeKey": "EventName", "AttributeValue": "AssumeRole"}],
+        StartTime=start_time,
+    ):
+        for event in page["Events"]:
+            data = json.loads(event["CloudTrailEvent"])
+            user_identity = data.get("userIdentity", {})
+            if user_identity.get("accountId") == account_b_id:
+                events.append({
+                    "time": event["EventTime"],
+                    "source_role": user_identity.get("arn"),
+                    "target_role": data.get("requestParameters", {}).get("roleArn")
+                })
+
+    print(f"✅ Found {len(events)} AssumeRole events from Account {account_b_id}.")
+    for e in events:
+        print(f"   - {e['time']}: {e['source_role']} → {e['target_role']}")
+    return events
+
+
+def find_s3_access_events(lookback_hours, roles_in_account_a):
+    """
+    Look up S3 GetObject or PutObject events performed by assumed roles in Account A.
+    """
+    print(f"\n🔍 Searching CloudTrail for S3 GetObject/PutObject events by assumed roles in Account A ...")
+
+    start_time = datetime.utcnow() - timedelta(hours=lookback_hours)
+    s3_events = []
+
+    event_names = ["GetObject", "PutObject", "ListBucket"]
+    paginator = cloudtrail.get_paginator("lookup_events")
+
+    for event_name in event_names:
+        for page in paginator.paginate(
+            LookupAttributes=[{"AttributeKey": "EventName", "AttributeValue": event_name}],
+            StartTime=start_time,
+        ):
+            for event in page["Events"]:
+                data = json.loads(event["CloudTrailEvent"])
+                user_identity = data.get("userIdentity", {})
+                arn = user_identity.get("arn", "")
+
+                if "assumed-role" in arn and any(role in arn for role in roles_in_account_a):
+                    s3_events.append({
+                        "time": event["EventTime"],
+                        "role": arn,
+                        "bucket": data.get("requestParameters", {}).get("bucketName"),
+                        "object": data.get("requestParameters", {}).get("key")
+                    })
+
+    print(f"✅ Found {len(s3_events)} S3 access events by roles in Account A.")
+    for e in s3_events[:10]:  # show first 10 for brevity
+        print(f"   - {e['time']}: {e['role']} accessed s3://{e['bucket']}/{e['object']}")
+    return s3_events
+
+
+if __name__ == "__main__":
+    trusted_roles = find_trusted_roles(ACCOUNT_B_ID)
+    assume_events = find_assume_role_events(ACCOUNT_B_ID, LOOKBACK_HOURS)
+    s3_access = find_s3_access_events(LOOKBACK_HOURS, trusted_roles)
+
+    print("\n========== SUMMARY ==========")
+    print("Roles in Account A trusted by Account B:")
+    print(trusted_roles)
+    print("\nCross-account AssumeRole events:")
+    for e in assume_events:
+        print(json.dumps(e, default=str))
+    print("\nS3 Access Events:")
+    for e in s3_access[:5]:
+        print(json.dumps(e, default=str))
